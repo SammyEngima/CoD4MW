@@ -538,6 +538,8 @@ matchStartTimer()
 	matchStartText.foreground = false;
 	matchStartText.hidewheninmenu = true;
 	
+	//waitForPlayers( level.prematchPeriod );
+	
 	matchStartTimer = createServerTimer( "objective", 1.4 );
 	matchStartTimer setPoint( "CENTER", "CENTER", 0, 0 );
 	matchStartTimer setTimer( level.prematchPeriod );
@@ -546,17 +548,16 @@ matchStartTimer()
 	matchStartTimer.foreground = false;
 	matchStartTimer.hideWhenInMenu = true;
 	
+	matchStartTimer maps\mp\gametypes\_hud::fontPulseInit();
 	
-	waitForPlayers( level.prematchPeriod );
-	
-	icountTime = int( level.prematchPeriod );
+	countTime = int( level.prematchPeriod );
 	
 	if ( countTime >= 2 )
 	{
 		while ( countTime > 0 && !level.gameEnded )
 		{
 			matchStartTimer setValue( countTime );
-			matchStartTimer thread maps\mp\gametypes\_hud::fontPulse( level );
+			matchStartTimer thread maps\mp\gametypes\_hud::fontPulse( self );
 			if ( countTime == 2 )
 				visionSetNaked( getDvar( "mapname" ), 3.0 );
 			countTime--;
@@ -567,6 +568,9 @@ matchStartTimer()
 	{
 		visionSetNaked( getDvar( "mapname" ), 1.0 );
 	}
+	
+	matchStartTimer destroyElem();
+	matchStartText destroyElem();
 }
 
 matchStartTimerSkip()
